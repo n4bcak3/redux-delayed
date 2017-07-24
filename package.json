@@ -1,0 +1,33 @@
+{
+  "name": "redux-delayed",
+  "version": "1.0.0",
+  "description": "Redux middleware for handling delayed actions",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/ -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/n4bcak3/redux-delayed.git"
+  },
+  "keywords": [
+    "redux",
+    "middleware",
+    "delay",
+    "delayed",
+    "dispatch"
+  ],
+  "author": "n4bcak3",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/n4bcak3/redux-delayed/issues"
+  },
+  "homepage": "https://github.com/n4bcak3/redux-delayed#readme",
+  "devDependencies": {
+    "chai": "^4.1.0",
+    "mocha": "^3.4.2"
+  },
+  "dependencies": {
+    "flux-standard-action": "^1.2.0"
+  }
+}
