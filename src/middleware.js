@@ -9,16 +9,16 @@
 const { isFSA } = require('flux-standard-action');
 
 // Babel Spread destructuring assignment
-const _objectWithoutProperties = function(obj, keys) { 
-  let target = {}; 
-  for (var i in obj) { 
-    if (keys.indexOf(i) >= 0) 
-      continue; 
-    if (!Object.prototype.hasOwnProperty.call(obj, i)) 
-      continue; 
-    target[i] = obj[i]; 
-  } 
-  return target; 
+const _objectWithoutProperties = function(obj, keys) {
+  let target = {};
+  for (var i in obj) {
+    if (keys.indexOf(i) >= 0)
+      continue;
+    if (!Object.prototype.hasOwnProperty.call(obj, i))
+      continue;
+    target[i] = obj[i];
+  }
+  return target;
 }
 
 const _extends = Object.assign;
@@ -61,7 +61,7 @@ const delayedDispatchMiddleware = function(source) {
 
     // Separating additional fields of action with promise
     // from flux standard action (FSA)
-    
+
     // ES6 implementation
     // const { promise, types, ...$FSA } = action;
 
@@ -92,13 +92,13 @@ const delayedDispatchMiddleware = function(source) {
     try {
       // Invoking promise
       // Passing helper class Source for general prepositions
-      const payload = await promise(source);
-      const successAction = _extends({}, $FSA, { 
+      const payload = await promise();
+      const successAction = _extends({}, $FSA, {
         payload,
-        type: SUCCESS 
+        type: SUCCESS
       });
 
-      return next(successAction); 
+      return next(successAction);
 
     } catch (error) {
       const failAction = _extends({}, $FSA, {
