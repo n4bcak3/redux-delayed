@@ -50,7 +50,7 @@ export function testAction(data) {
         TEST_ACTION_ON_RESOLVE, // dispatched if promise resolved
         TEST_ACTION_ON_REJECT // if rejected
     ],
-    promise: () => // helper class
+    promise: () =>
         source.makeSomeAction(data)
   };
 };
