@@ -1,6 +1,26 @@
 # redux-delayed
 Redux middleware for accepting actions with delayed dispatch
 
+## Usage
+
+```js
+// Here our middleware's
+const middlewares = [
+  ...
+  delayedMiddleware(source), // Helper class (optional)
+  ...
+];
+
+const enhancer = applyMiddleware(...middlewares)
+
+// And creating store
+const store = createStore(
+  rootReducer,
+  initState,
+  enhancer
+);
+```
+
 ## Types of actions
 
 Default action (as object)
@@ -18,6 +38,7 @@ Action as function:
 
 ```js
 export function testAction(data) {
+  ...
   return dispatch => {
     dispatch({
       type,
@@ -32,6 +53,8 @@ Action as Promise:
 ```js
 export function testAction(data) {
   return new Promise((resolve, reject) => {
+     ...
+     // Should be resolved/rejected with FSA
      resolve({
        type,
        payload
@@ -50,8 +73,8 @@ export function testAction(data) {
         TEST_ACTION_ON_RESOLVE, // dispatched if promise resolved
         TEST_ACTION_ON_REJECT // if rejected
     ],
-    promise: () =>
-        source.makeSomeAction(data)
+    promise: source => // Helper class
+      source.fetchSomeData(data)
   };
 };
 ```

@@ -1,44 +1,31 @@
+const { isFSA } = require('flux-standard-action');
+const {
+  isPromise,
+  objectWithoutProperties,
+  _extends
+} = require('./utils');
+
 /**
  * Delayed Dispatch Middleware
  *
  * Provide functionality for delayed dispatch of the action payload.
  * Handling work with async actions invocation, pending statuses
  * and looping it data back to store
+ *
+ * @param  {Object}   source Helper class that will be passed
+ * @return {function}        Redux Middleware
  */
-
-const { isFSA } = require('flux-standard-action');
-
-// Babel Spread destructuring assignment
-const _objectWithoutProperties = function(obj, keys) {
-  let target = {};
-  for (var i in obj) {
-    if (keys.indexOf(i) >= 0)
-      continue;
-    if (!Object.prototype.hasOwnProperty.call(obj, i))
-      continue;
-    target[i] = obj[i];
-  }
-  return target;
-}
-
-const _extends = Object.assign;
-
-const isPromise = function(action) {
-  return (
-    action &&
-    typeof action.then === 'function'
-  );
-};
 
 const delayedDispatchMiddleware = function(source) {
   return ({ dispatch, getState }) => next => async action => {
-    /*
-      Going to next middleware if it is a FSA
-    */
+
+    // Going to next middleware if its FSA
     if (isFSA(action)) {
       return next(action);
     }
 
+    // Adding handlers if its Promise
+    // Important to resolve/reject promise with FSA!
     if (isPromise(action)) {
       return action
         .then(({payload, type}) => {
@@ -67,7 +54,7 @@ const delayedDispatchMiddleware = function(source) {
 
     const promise = action.promise;
     const types = action.types;
-    const $FSA = _objectWithoutProperties(action, ['promise', 'types']);
+    const $FSA = objectWithoutProperties(action, ['promise', 'types']);
 
     // Checking if action contain promise
     // which need to be handled
@@ -91,7 +78,6 @@ const delayedDispatchMiddleware = function(source) {
 
     try {
       // Invoking promise
-      // Passing helper class Source for general prepositions
       const payload = await promise();
       const successAction = _extends({}, $FSA, {
         payload,
