@@ -4,10 +4,12 @@ Redux middleware for accepting actions with delayed dispatch
 ## Usage
 
 ```js
+import delayedMiddleware from 'redux-delayed';
+
 // Here our middleware's
 const middlewares = [
   ...
-  delayedMiddleware(source), // Helper class (optional)
+  delayedMiddleware(source), // passing helper class (optional)
   ...
 ];
 
