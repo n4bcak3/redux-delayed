@@ -3,11 +3,11 @@ var should = chai.should();
 
 const delayedMiddleware = require('../src/middleware.js');
 
-const middleware = delayedMiddleware({});
+const middleware = delayedMiddleware;
 
 
 describe('core.middlewares.delayed', function () {
-  
+
   // Default action
   // export function testAction(data) {
   //   return {
@@ -17,7 +17,7 @@ describe('core.middlewares.delayed', function () {
   //     }
   //   }
   // }
-  
+
   it('should accept FSA', function () {
     const nextArgs = [];
     const fakeNext = action => { nextArgs.push(action) };
@@ -60,7 +60,7 @@ describe('core.middlewares.delayed', function () {
     setTimeout(() => {
       nextArgs.should.deep.include.members([
         {
-          type: types[0]  
+          type: types[0]
         },
         {
           type: types[1],

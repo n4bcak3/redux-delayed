@@ -1,5 +1,5 @@
-const { isFSA } = require('flux-standard-action');
 const {
+  isFSA,
   isPromise,
   objectWithoutProperties,
   _extends
@@ -16,10 +16,11 @@ const {
  * @return {function}        Redux Middleware
  */
 
-const delayedDispatchMiddleware = function(source) {
-  return ({ dispatch, getState }) => next => async action => {
+const delayedDispatchMiddleware = ({ dispatch, getState }) =>
+  next => async action => {
 
-    // Going to next middleware if its FSA
+    // If its FSA - default
+    // going to next middleware
     if (isFSA(action)) {
       return next(action);
     }
@@ -42,10 +43,16 @@ const delayedDispatchMiddleware = function(source) {
         });
     }
 
+    // If it is function
+    // execute with 2 parameters:
+    // - dispatch to store function
+    // - get store state function
     if (typeof action === 'function') {
       return action(dispatch, getState);
     }
 
+    // Now its not function or FSA (standard object)
+    // ---------------------------------------------
     // Separating additional fields of action with promise
     // from flux standard action (FSA)
 
@@ -94,7 +101,8 @@ const delayedDispatchMiddleware = function(source) {
 
       return next(failAction);
     }
-  };
+
+
 };
 
 module.exports = delayedDispatchMiddleware;

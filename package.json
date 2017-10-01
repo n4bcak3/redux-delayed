@@ -1,8 +1,8 @@
 {
   "name": "redux-delayed",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "description": "Redux middleware for handling delayed actions",
-  "main": "index.js",
+  "main": "src/middleware.js",
   "scripts": {
     "test": "mocha test/ -c"
   },

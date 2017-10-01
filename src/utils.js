@@ -1,4 +1,4 @@
-// Utils
+const { isFSA } = require('flux-standard-action');
 
 // Babel Spread destructuring assignment
 const objectWithoutProperties = function(obj, keys) {
@@ -23,6 +23,7 @@ const isPromise = function(action) {
 const _extends = Object.assign;
 
 module.exports = {
+  isFSA,
   isPromise,
   objectWithoutProperties,
   _extends
