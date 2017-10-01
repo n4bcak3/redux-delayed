@@ -9,7 +9,7 @@ import delayedMiddleware from 'redux-delayed';
 // Here our middleware's
 const middlewares = [
   ...
-  delayedMiddleware(source), // passing helper class (optional)
+  delayedMiddleware,
   ...
 ];
 
@@ -75,7 +75,7 @@ export function testAction(data) {
         TEST_ACTION_ON_RESOLVE, // dispatched if promise resolved
         TEST_ACTION_ON_REJECT // if rejected
     ],
-    promise: source => // Helper class
+    promise: () =>
       source.fetchSomeData(data)
   };
 };
