@@ -20,11 +20,25 @@ const isPromise = function(action) {
   );
 };
 
-const _extends = Object.assign;
+const isActionWithPromise = function(action) {
+  return (
+    action.promise &&
+    !!action.types.length
+  );
+}
+
+const extendAction = function(FSA, props) {
+  return Object.assign(
+    {},
+    FSA,
+    typeof props === 'object' ? props : {}
+  );
+};
 
 module.exports = {
   isFSA,
   isPromise,
+  isActionWithPromise,
   objectWithoutProperties,
-  _extends
+  extendAction
 };

@@ -2,7 +2,8 @@ const {
   isFSA,
   isPromise,
   objectWithoutProperties,
-  _extends
+  isActionWithPromise,
+  extendAction
 } = require('./utils');
 
 /**
@@ -16,9 +17,8 @@ const {
  * @return {function}        Redux Middleware
  */
 
-const delayedDispatchMiddleware = ({ dispatch, getState }) =>
+const DelayedDispatchMiddleware = ({ dispatch, getState }) =>
   next => async action => {
-
     // If its FSA - default
     // going to next middleware
     if (isFSA(action)) {
@@ -52,22 +52,14 @@ const delayedDispatchMiddleware = ({ dispatch, getState }) =>
     }
 
     // Now its not function or FSA (standard object)
-    // ---------------------------------------------
-    // Separating additional fields of action with promise
-    // from flux standard action (FSA)
-
-    // ES6 implementation
-    // const { promise, types, ...$FSA } = action;
+    // Checking if action contain promise
+    // which need to be handled
+    if (!isActionWithPromise(action)) {
+      return next(action);
+    }
 
     const promise = action.promise;
     const types = action.types;
-    const $FSA = objectWithoutProperties(action, ['promise', 'types']);
-
-    // Checking if action contain promise
-    // which need to be handled
-    if (!promise) {
-      return next(action);
-    }
 
     // Destructuring types of action
     // [pending, ok, error]
@@ -76,33 +68,41 @@ const delayedDispatchMiddleware = ({ dispatch, getState }) =>
     const SUCCESS = types[1];
     const FAIL = types[2];
 
-    // Sending action indicating that promise invoked
-    const requestAction = _extends({}, $FSA, {
-      type: REQUEST
-    });
+    // Separating additional fields of action with promise
 
-    next(requestAction);
+    // ES5 implementation
+    const actionProps = objectWithoutProperties(action, ['promise', 'types']);
+
+    // ES6 implementation
+    // const { promise, types, ...actionProps } = action;
+
+    // Sending action indicating that promise invoked
+    next(extendAction({ type: REQUEST }, actionProps));
+
+    let __action;
 
     try {
-      // Invoking promise
-      const payload = await promise();
-      const successAction = _extends({}, $FSA, {
-        payload,
-        type: SUCCESS
-      });
+      const payload = await promise(); // invoking promise
 
-      return next(successAction);
-
+      __action = extendAction(
+        {
+          payload,
+          type: SUCCESS
+        },
+        actionProps
+      );
     } catch (error) {
-      const failAction = _extends({}, $FSA, {
-        error,
-        type: FAIL
-      });
+      __action = extendAction(
+        {
+          type: FAIL,
+          error
+        },
+        actionProps
+      );
+    };
 
-      return next(failAction);
-    }
+    // Sending result action
+    return next(__action);
+  };
 
-
-};
-
-module.exports = delayedDispatchMiddleware;
+module.exports = DelayedDispatchMiddleware;
