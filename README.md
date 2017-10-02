@@ -1,4 +1,8 @@
 # redux-delayed
+
+[![Build Status](https://travis-ci.org/n4bcak3/redux-delayed.svg?branch=master)](https://travis-ci.org/n4bcak3/redux-delayed)
+[![npm](https://img.shields.io/npm/dt/redux-delayed.svg)](https://www.npmjs.com/package/redux-delayed)
+
 Redux middleware for accepting actions with delayed dispatch
 
 ## Usage
